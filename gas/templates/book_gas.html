@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+    <style>
+        body {
+            background: linear-gradient(45deg, green, blue);
+        }
+
+        .book-input {
+            display: block;
+            margin: auto;
+            width: 70%;
+            padding: 5px 10px;
+            font-size: 20px;
+            margin-top: 7px;
+            border-radius: 4px;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        }
+        .bookgas-headin{
+            font-size: 35px;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+        .bookgas-main{
+            margin: 20px 10px;
+            padding: 20px;
+            background: rgba(255, 255, 255,.8);
+            text-align: center;
+            border-radius: 10px;
+        }
+        .bookgas-button{
+            font-size: 25px;
+            font-weight: bold;
+            padding: 5px 20px;
+            margin-top: 15px;
+            border: 0;
+            border-radius: 5px;
+            box-shadow: 0 0 5px 4px gray;
+            background: linear-gradient(brown, yellow);
+            /* color: white; */
+        }
+    .hidden-option {
+        display: none;
+    }
+    </style>
+    
+</head>
+
+<body>
+    {% include 'user_navigation.html' %}
+    <div class="row m-auto justify-content-center">
+        <div class="col-7 bookgas-main mt-4">
+            <div class="bookgas-headin">Book Your Gas</div>
+            <form method="post">
+                {% csrf_token %}
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" name="name" class="book-input" value="{{request.user.first_name}} {{request.user.last_name}}" readonly title="Your full name" placeholder="Full Name">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" class="book-input" value="{{request.user.username}}" readonly title="Your email address" placeholder="Email">
+                <input type="number" name="contact" class="book-input" value="" required placeholder="Enter Contact Number">
+                <label for="gas">Gas Type:</label>
+                <select name="gas" class="book-input" id="gas" onchange="fun2()" required>
+                    <option selected hidden disabled>Select Gas Type</option>
+                    <option name="Home">Home</option>
+                    <option name="Commericial">Commericial</option>
+                </select>
+                <input type="text" name="price" class="book-input" value="" id="price" placeholder="Price Your Gas" readonly>
+
+                <label for="datetime">Booking Date:</label>
+                <input type="text" name="booking-date" class="book-input" value="" id="datetime" readonly title="Booking Date" placeholder="Booking Date">
+                    <option value="" disabled selected class="hidden-option">Select ID</option>
+
+                <label for="val">Select ID Proof Type:</label>
+                <select name="gid" id="val" class="book-input" onchange="fun()" title="Select ID Proof Type">
+                    <option value="" disabled selected class="hidden-option">Select ID</option>
+                    <option value="Aadhar">Aadhar Card</option>
+                    <option value="PanCard">Pan Card</option>
+                    <option value="DL">Driving Licence(DL) </option>
+                </select>
+                <label>Enter <span id="name"></span> Number:</label>
+                <input type="text" class="book-input" name="gidn" placeholder="Enter ID Proof Number" required>
+                <input type="text" class="book-input" name="address" placeholder="Enter Your Address">
+                <button type="submit" class="bookgas-button"><i class="fa-sharp fa-solid fa-fire"></i> Book Now</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function check(){
+            alert("Doen");
+        }
+
+        let d = new Date();
+        let week = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+        let month = ["Jan","Feb","March","April","May","June","July","Aug","Sept","Oct","Nov","Dec"]
+        let dy = week[d.getDay()];
+        let dt = d.getDate();
+        let m = month[d.getMonth()];
+        let y = d.getFullYear();
+        datetime.value = dt+" "+m+" "+y+" "+dy;
+        document.getElementById('month').value = m;
+        function fun() {
+            var name = document.getElementById("val").value;
+            document.getElementById('name').innerHTML = name;
+        }
+        function fun2() {
+            var name = document.getElementById("gas").value;
+            if (name=="Home"){
+                document.getElementById('price').value = "Rs. 1150/-";
+            }
+            if (name=="Commericial"){
+                document.getElementById('price').value = "Rs. 2100/-";
+            }
+        }
+    </script>    
+</body>
+</html>
+
+
+{% if error == "no" %}
+<script>
+    alert("Gas Booking Request Send")
+    window.location = ("{% url 'user_home' %}")
+</script>
+{% endif %}
+
+{% if error == "yes" %}
+<script>
+    alert("Somethig went wrong. Try again later...")
+    window.location = ("{% url 'user_home' %}")
+</script>
+{% endif %}
+
+{% include 'footer.htm' %}

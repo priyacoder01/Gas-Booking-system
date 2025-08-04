@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+    {% include 'admin_navigation.html' %}
+</head>
+<style>
+    .user-profile {
+        background-color: rgba(255, 255, 255, .7);
+        box-shadow: 0 0 5px 8px lightgray;
+        padding: 40px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+
+    .user-base {
+        /* background: linear-gradient(to right, white, lightgreen); */
+        background-image: url(https://images.theconversation.com/files/474051/original/file-20220714-9155-2h5fff.jpg?ixlib=rb-1.1.0&rect=29%2C0%2C3934%2C1964&q=45&auto=format&w=1356&h=668&fit=crop);
+        background-size: 100% 100%;
+    }
+
+    .user-heading {
+        text-align: center;
+        font-size: 40px;
+        font-weight: bold;
+        text-decoration: underline;
+    }
+
+    .user-data th {
+        text-align: left;
+        padding: 5px;
+    }
+
+    .user-data {
+        margin-top: 5px;
+        margin-left: 20%;
+        font-size: 20px;
+    }
+    .status-change{
+        width: 270px;
+        background: linear-gradient(to right,rgb(238, 156, 144),white);
+        font-size: 25px;
+        padding: 4px 7px;
+        border-radius: 5px;
+    }
+    .update-user{
+        font-size: 25px;
+        font-weight: bold;
+        padding: 5px 10px;
+        background:linear-gradient(to right,pink,lightgreen);
+        border: 0;
+        border-radius: 6px;
+        margin: 15px 0 0 80px;
+        border: 2px solid black;
+    }
+</style>
+
+<body>
+    <div class="user-base">
+        <div class="user-heading">
+             Gas Booking Status
+        </div>
+        <div class="row m-auto users-base2 justify-content-center text-center mt-3">
+            <div class="col-7 user-profile">
+                <table class="user-data">
+                    <tr>
+                        <th>Name </th>
+                        <th> : {{data.name}}</th>
+                    </tr>
+                    <tr>
+                        <th>Email </th>
+                        <th> : {{data.email}}</th>
+                    </tr>
+                    <tr>
+                        <th>Contact Number </th>
+                        <th> : {{data.contact}}</th>
+                    </tr>
+                    <tr>
+                        <th>Gas-Type </th>
+                        <th> : {{data.gastype}}</th>
+                    </tr>
+                    <tr>
+                        <th>Price </th>
+                        <th> : {{data.price}}</th>
+                    </tr>
+                    <tr>
+                        <th>Date & Day </th>
+                        <th> : {{data.day}}</th>
+                    </tr>
+                    <tr>
+                        <th>Government ID </th>
+                        <th> : {{data.idtype}} <br> {{data.idno}}</th>
+                    </tr>
+                    <tr>
+                        <th>Address </th>
+                        <th> : {{data.address}}</th>
+                    </tr>
+                    <tr>
+                        <th>Action </th>
+                        <form method="post">
+                            {% csrf_token %}
+                            <th> : 
+                                {% if data.status == "Pending" %}
+                                    <select name="status" class="status-change" title="Change booking status">
+                                        <option value="Pending" selected>Pending</option>
+                                        <option value="Confirm">Confirm</option>
+                                        <option value="Canceled">Cancel</option>
+                                    </select>
+                                {% endif %}
+                                {% if data.status == "Confirm" %}
+                                    <select name="status" class="status-change" title="Change booking status">
+                                        <option value="Pending">Pending</option>
+                                        <option value="Confirm" selected>Confirm</option>
+                                        <option value="Canceled">Cancel</option>
+                                    </select>
+                                {% endif %}
+                                {% if data.status == "Canceled" %}
+                                    <select name="status" class="status-change" title="Change booking status">
+                                        <option value="Pending">Pending</option>
+                                        <option value="Confirm">Confirm</option>
+                                        <option value="Canceled" selected>Cancel</option>
+                                    </select>
+                                {% endif %}
+                                {% if data.status == "Paid" %}
+                                    <select name="status" class="status-change" title="Booking status">
+                                        <option disabled hidden selected>PAID</option>
+                                    </select>
+                                {% endif %}
+                                
+                            </th>
+                    </tr>
+                    <tr>
+                        <th colspan="2">
+                            <input type="submit" class="update-user" value="Update User">
+                        </form>
+                        </th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+
+
+{% if error == "yes" %}
+<script>
+    alert("Something went Wrong")
+</script>
+{% endif %}
+
+{% if error == "no" %}
+<script>
+    alert("Booking Status Updated")
+    window.location = ("{% url 'view_booking' %}")
+</script>
+{% endif %}
+
+{% include 'footer.htm' %}

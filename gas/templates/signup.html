@@ -1,0 +1,120 @@
+{% load static %}
+
+{% block body %}
+
+{% include 'navigation.html' %}
+
+<script>
+    function checkpass() {
+        if (document.signup.pwd.value != document.signup.cpwd.value) {
+            alert('Password Does Not Match')
+            document.signup.cpwd.focus();
+            return false;
+        }
+        return true;
+    }
+    function validpayment() {
+        let fn = document.getElementById('fname').value;
+        if (!(fn.match(/^[A-Za-z\s]+$/))) {
+            alert("Enter Valid Your Name");
+            return false;
+        }
+        let con = document.getElementById('contact').value;
+        if (con.length != 10) {
+            alert("Contact Number Must be 10 digit");
+            return false;
+        }
+    }
+</script>
+<style>
+    body {
+        background-image: url(https://png.pngtree.com/background/20210716/original/pngtree-green-gas-psychedelic-smoke-cloud-wallpaper-picture-image_1359239.jpg);
+        background-size: 100% 100%;
+    }
+    label{
+        margin-left: 4vw;
+    }
+    .signpu-input{
+        display: block;
+        width: 80%;
+        margin: auto;
+        padding: 3px 9px;
+        border-radius: 5px;
+    }
+    .signup-heading{
+        text-align: center;
+        font-size: 30px;
+        font-weight: bold;
+        font-family:copperplate gothic;
+        text-decoration: underline;
+        color:blue;
+
+}
+</style>
+
+<hr>
+<div class="row m-auto justify-content-center">
+    <div class="col-1"> </div>
+    <div class="col-10 col-md-6"
+        style="background:rgba(211, 211, 211,.7);border-radius:10px;padding-top:20px">
+        <form class="container m-auto" onsubmit="return checkpass();" name="signup" method="post"
+            enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="signup-heading">User Resistration</div>
+            <label>First Name</label>
+            <input type="text" class="signpu-input" id="fname" name="fname" placeholder="Enter First Name" required>
+            <label>Last Name</label>
+            <input type="text" class="signpu-input" name="lname" placeholder="Enter Last Name" required>
+            <label>Email ID:</label>
+            <input type="email" class="signpu-input" name="email" placeholder="Enter Email Address" required>
+
+            <label>Contact Number:</label>
+            <input type="number" id="contact" class="signpu-input" name="contact" placeholder="Enter Phone Number"
+                required>
+            <label>Date of Birth:</label>
+            <input type="date" class="signpu-input" name="dob" required>
+
+            <label>Password:</label>
+            <input type="password" class="signpu-input" name="pwd" placeholder="Enter Password" required>
+
+            <label>Confirm Password:</label>
+            <input type="password" class="signpu-input" name="cpwd" placeholder="Confirm Password" required>
+
+            <label>Gender</label>
+            <div style="border:1px solid lightgrey ; padding:6px ; border-radius:6px;width: 80%;margin:auto;">
+                <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" id="customRadioInLine1" name="gender" class="custom-control-input" value="Male">
+                    <label class="custom-control-label" for="customRadioInLine1">Male</label>
+                </div>
+                <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" id="customRadioInLine2" name="gender" class="custom-control-input"
+                        value="Female">
+                    <label class="custom-control-label" for="customRadioInLine2">Female</label>
+                </div>
+            </div>
+
+            <label>Image</label>
+            <input type="file" class="signpu-input" name="image" required>
+            <label>Address:</label>
+            <input type="text" class="signpu-input" name="address" placeholder="Enter Your Address" required>
+            <input type="submit" value="Submit" class="btn btn-primary my-3" style="width:200px;margin-left: 34%;"
+                onclick="return validpayment()">
+        </form>
+    </div>
+</div>
+
+{% if error == "no" %}
+<script>
+    alert("Signup Successfully")
+    window.location = ("{% url 'login' %}")
+</script>
+{% endif %}
+
+{% if error == "yes" %}
+<script>
+    alert("Something Wrong, Try Again...")
+</script>
+{% endif %}
+{% endblock %}
+
+{% include 'footer.htm' %}

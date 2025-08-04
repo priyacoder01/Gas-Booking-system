@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% include 'admin_navigation.html' %}
+</head>
+<style>
+    .user-base {
+        padding-bottom: 30px;
+        background: linear-gradient(to right, rgba(255, 0, 0, .5), rgba(144, 238, 238, .6));
+    }
+
+    .user-heading {
+        text-align: center;
+        font-size: 40px;
+        font-weight: bold;
+        text-decoration: underline;
+    }
+    .search-form{
+        display: inline;
+    }
+    .search-form input{
+        background-image: url(https://static.vecteezy.com/system/resources/thumbnails/002/272/237/small/search-icon-simple-free-illustration-free-vector.jpg);
+        background-position: 95% 10px; 
+        background-size: 20px 20px;
+        background-repeat: no-repeat;
+        outline: none;
+        padding-left:25px;
+        font-size: 20px;
+        margin: 5px 0;
+        border-radius: 5px;
+        padding: 3px 20px;
+        width: 30%;
+    }
+    .search-form a{
+        margin-bottom: 8px;
+    }
+</style>
+
+<body>
+
+    <div class="user-base">
+        <div class="user-heading">
+            All Gas Booking
+        </div>
+        <div class="row m-auto users-base justify-content-center mt-3">
+            <div class="col-10 col-md-11" style="border:1px solid black;border-radius:10px;">
+                <form method="POST" action="/search" class="search-form">
+                    {% csrf_token %}
+                    <input type="text" name="name" placeholder="Search Booking by Name">
+                     <a href="{% url 'view_booking' %}"
+                        class="btn btn-dark">Cancel</a>
+                </form>
+                <form method="POST" action="/searchday" class="search-form"> 
+                    {% csrf_token %}
+                    <input type="text" name="name2" placeholder="Search Booking by Date">
+                    <a href="{% url 'view_booking' %}"
+                        class="btn btn-dark">Cancel</a>
+                </form>
+                <table class="table">
+                    <tr style="background:rgba(0, 255, 76, 0.7);">
+                        <th>S.No</th>
+                        <th>Name</th>
+                        <th>Contact</th>
+                        <th>Gas Type</th>
+                        <th>Data & Day</th>
+                        <th>ID Proofe</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                    {% for i in data %}
+                    <tr>
+                        <td>{{ forloop.counter }} </td>
+                        <td>{{ i.name }}</td>
+                        <td>{{ i.contact }}</td>
+                        <td>{{ i.gastype }}</td>
+                        <td>{{ i.day }}</td>
+                        <td>{{ i.idtype }} <br>{{ i.idno }}</td>
+                        <td><a href="{% url 'booking_status' i.id %}" class="btn btn-primary btn-sm">{{ i.status }}</a>
+                        </td>
+                        <td>
+                            <a href="{% url 'delete_booking' i.id %}" onclick="return confirm('Are you sure?')"
+                                class="btn btn-danger btn-sm"><i class="fa-solid fa-trash-arrow-up"></i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                {% if not data %}
+                <h1 align="center">No Data Found</h1>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+
+{% include 'footer.htm' %}

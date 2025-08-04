@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% include 'user_navigation.html' %}
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            background-image: url(https://static.vecteezy.com/system/resources/previews/005/254/276/large_2x/shopping-online-concept-hand-holding-credit-card-on-technology-background-with-copy-space-for-text-free-photo.jpg);
+            background-size: cover;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        }
+
+        .paynow {
+            margin: 20px 0;
+            background: rgba(245, 249, 249, 0.74);
+            padding: 10px 50px 20px 50px;
+            border-radius: 20px;
+        }
+
+        .ttl {
+            font-size: 20px;
+        }
+
+        .ttl1 {
+            margin-top: 10px;
+            font-size: 20px;
+            font-weight: bold;
+            padding-left: 20px;
+        }
+    </style>
+    <script>
+        function validpayment() {
+            let fn = document.getElementById('chname').value;
+            if (!(fn.match(/^[A-Za-z\s]+$/))) {
+                alert("Enter Valid First Name");
+                return false;
+            }
+            let con = document.getElementById('cardno').value;
+            if (con.length != 16) {
+                alert("Enter 16 digit Card number");
+                return false;
+            }
+            let cvv = document.getElementById('cvv').value;
+            if (cvv.length != 3) {
+                alert("Enter 3 digit Valid CVV number");
+                return false;
+            }
+
+        }
+    </script>
+</head>
+
+<body>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        <div class="container-fluid">
+            <div class="row justify-content-start" style="width:100%;">
+                <div class="col-md-1"></div>
+                <div class="col-12 col-md-5 paynow">
+                    <h1 align="center" style="text-decoration: underline;">Pay By Card</h1>
+                    <label for="">Card Holder Name</label>
+                    <input type="text" class="form-control" id="chname" name="name" placeholder="Enter Full Name"
+                        required>
+                    <label for="">Card Number</label>
+                    <input type="number" class="form-control" name="cardno" id="cardno" placeholder="Enter Card Number"
+                        required>
+                    <label for="">CVV</label>
+                    <input type="number" class="form-control" id="cvv" name="cvv" placeholder="Enter CVV Number"
+                        required>
+                    <label for="">Expiry date</label>
+                    <input type="month" class="form-control" name="exp_date" placeholder="Enter Expiry Date" required>
+                    <label class="ttl">Total Amount :</label><label class="ttl1">{{data.price}}</label><br>
+                    <label class="ttl">User Name :</label><label for="" class="ttl1">{{data.name}}</label><br><br>
+                    
+                    <center>
+                        <input type="submit" class="btn btn-success btn-md" onclick="return validpayment()"
+                            value="Pay Now">
+                        <a href="{% url 'my_booking' %}" class="btn btn-danger btn-md">Cancel Payment</a>
+                    </center>
+                </div>
+            </div>
+        </div>
+    </form>
+</body>
+
+</html>
+
+{% if error == "no" %}
+<script>
+    alert("Payment Successful")
+    window.location = ('{% url 'my_booking' %}')
+</script>
+{% endif %}
+
+{% if error == "yes" %}
+<script>
+    alert("Something went wrong, Try Again")
+</script>
+{% endif %}
+
+
+{% include 'footer.htm' %}
